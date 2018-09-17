@@ -1,1 +1,88 @@
 Comandos Git
+.gitconfig <----> se puede encontrar en el entorno del sistema en la carpeta /etc/gitconfig
+.gitconfig <----> se puede encontrar en el entorno del usuario  en la carpeta ~
+ git config --global user.name "John Doe" <----> para identificar tu identidad
+ git config --global user.email johndoe@example.com <----> para identificar tu email
+.gitconfig <----> se puede encontrar en el directorio del repositorio git en la carpeta .git/config
+git config --list <----> para listar tu configuracion
+git config [clave] <----> para ver el valor de esa clave (user.name)
+.gitingnore <----> Archivo donde indicamos patrones de archivos que queremos ignorar
+git init <----> Inicia un repositorio
+git add [archivo o carpeta] <----> Inicia el seguimiento a un archivo, coloca los cambios de un archivo en HEAD
+git commit <----> Confirmar tus cambios y colocarlos en INDEX(abre un editor automaticamente y te pedira un mensaje de confirmacion)
+git commit -m "[mensaje sobre la confirmacion]" <----> Confirmar tus cambios y colocarlos en INDEX colocando un mensaje.
+git diff <----> Muestra la diferencia entre los archivos que estan en HEAD y archivos del directorio que cambiaste.
+git diff --staged <----> Muestra la diferencia entre los archivos que estan en HEAD y los archivos que estan en INDEX (archivos que ya confirmaste)
+git commit -a [archivo] <----> Salta la parte del HEAD y coloca el archivo en INDEX
+----Para Eliminar un archivo debes primero eliminarlo del HEAD( area de preparacion) y luego confirmar los cambios con commit
+git rm [archivo] <----> Elimna un archivo de HEAD  que ya se confirmo alguna vez
+git rm -f [archivo] <----> Elimina un archivo de HEAD que nunca se confirmo -f fuerza la eliminacion.
+git rm --cached [archivo] <----> Elimina un archivo solo del area de preparacion pero lo mantiene en el disco duro.
+----Despues de ejecutar git rm siempre es bueno ejecutar git commit para ver los cambios
+git mv [origen] [destino] <----> Mueve el archivo de origen a destino.
+git log <----> para ver el historico de confirmarciones.
+git log -p <----> Muestra diferencias entre las confirmaciones
+git log -N <----> N es el numero de confirmaciones que deseas ver (siempre son las N ultimas)
+git log --stat <----> Log con estadisticas
+git log --pretty=[oneline, short, full, fuller, format] <----> Imprime el log en un formato diferente
+                                                format <----> Permite especificar el formato con el que deseas ver el log 
+							%H mostrar el hash
+							%h mostrar el hash resumido
+							%T mostrar el hash
+							%t mostrar el hash resumido
+							%an nombre del autor
+							%ad fecha de la autoria
+							%ar fecha de la autoria, relativa
+							%cn nombre del confirmador
+							%ce Direccion de correo del confirmador
+							%cd Fecha de confirmacion
+							%s asunto
+							ejemplo <---->  git log --pretty=format:"%h - %an, %ar : $s"
+
+							A las combinaciones format y oneline puedes añadirle --graph que muestra un modo grafico del log
+git log --before="[yyyy-MM-dd]" <----> Muestra las confirmacion hechas antes de la fecha
+git log --after="[yyyy-MM-dd]" <----> Muestra las confirmacion hechas despues de la fecha
+ejmplo git log git log --pretty="%h - %s" --author=gitster --since="2008-10-01" \  --before="2008-11-01" --no-merges 
+git commit --amend <----> Deshace el commit anterior para cambiar el mensaje y volver a hacer commit, si tienes archivos en HEAD los confirmaras automaticamente.
+git resed HEAD [archivo] <----> Quita un archivo del area de preparacion HEAD
+git checkout -- [archivo] <----> Descarta los cambios de tu directorio y regresan al estado de la ultima confirmacion.
+git remote <----> Muestra una lista de los servidores remotos que hayas agregado
+git remote -v <----> Ves la URL asociada a cada remoto
+git remote add [nombreRemoto] [URL] <----> Sirve para agregar el repositorio remoto
+git fetch [nombreRemoto] <----> Recupera los datos de ese remoto a tu repositorio local (no los une con los datos que tienes en tu repositorio)
+git pull <----> Recupera los datos y los une automaticamente, siempre en cuando tu rama local siga a tu rama remota.
+git push [nombreRemoto] [ramaLocal] <----> Envia informacion al servidor remoto, siempre en cuando tengas permisos y nadie haya hecho cambios mientras tanto, si no tendras que bajarte los cambios primero y luego hacer push.
+git push [nombreRemoto] [ramaLocal:nombreRamaRemota] <----> Envia informacion al servidor remoto, siempre en cuando tengas permisos y nadie haya hecho cambios mientras tanto, si no tendras que bajarte los cambios primero y luego hacer push.
+git push [nombreRemoto] [:nombreRamaRemota] <----> Elimina una rama remota de nombre nombreRamaRemota.
+git push -u [nombreRemoto] [nombreRamaRemota] <----> Crea una rama remota con el nombre [nombreRamaRemota] y realiza una Rama seguimiento con tu rama actual
+git remote show [nombreRemoto] <----> Muestra informacion del remoto y como se encuentran tus ramas respecto a él.
+git remote rename [nombreRemoto] [nombreRemotoNuevo]
+git remote rm [nombreRemoto]
+git tag <----> Ver etiquetas de realease
+git tag -a [nombreEtiqueta] -m ["Mensaje"] [hashConfirmacion]<----> Crear una etiqueta [hashConfirmacion] es opcional.
+git push origin [nombreEtiqueta]  <----> Enviar la etiqueta a un repositorio
+git branch <----> Lista las ramas del repositorio y coloca un (*) en la rama activa.
+git branch [nombreRama] <----> Crea una rama 
+git checkout [nombreRama] <----> envia el apuntador HEAD a apuntar a la rama que indiques (mover entre ramas) revirtiendo los cambios que se diferencian entre ramas.
+git checkout -b [nombreRama] <----> Crear una rama y trasladarte a ella.
+git branch -d [nombreRama] <----> Elimina una rama siempre en cuando haya sido fusionada, para forzar -D (no recomendable)
+git branch -v <----> Para ver la ultima confirmacion en cada rama
+git branch --merged <----> para mostrar solo las ramas que fueron fusionadas
+git branch --no-merged <----> para mostrar solo las ramas que no fueron fusionadas
+git checkout -b [nombreRamaLocal] [remoto/NombreRamaRemota] <----> Crea una rama local basandose en una rama remota.
+git merge [nombreRama] <----> Fusionar la rama actual con [nombreRama] 
+   -----------------Conflictos---------------------
+	1.- Abrir el archivo en conflicto
+	2.- Escoger tus cambios que deseas conservar, la seccion HEAD es la que tienes en tu rama actual
+	3.- para finalizar añade el archivo en conflicto a la seccion de preparacion mediante git add
+	4.- Para confirmar el merge con todos los conflictos resueltos aplica git commit
+---------------------Rama de Seguimiento------------------
+Rama local que tiene relacion directa con una rama remota.
+Si en una Rama de seguimiento tecleas "git push" ya se sabe a que remoto, y a que rama envias.
+Si en una Rama de seguimiento tecleas "git pull" git descarga la diferencia (git fetch) y combina lo descargado con tu rama de seguimiento automaticamente.
+Recuerda que para hacer una Rama de seguimiento puedes ejecutar el comando git checkout -b [nombreRamaLocal] [remoto/NombreRamaRemota]
+git push -u [nombreRemoto] [nombreRamaRemota] <----> Crea una rama remota con el nombre [nombreRamaRemota] y realiza una Rama seguimiento con tu rama actual
+---------------------Rama de Seguimiento------------------
+git rebase [RamaFusion] <----> Realiza un proceso de reordenamiento entre tu rama actual y [RamaFusion]
+git rebase --onto [RamaInit] [AlgunaRama] [AlgunaRama] [RamaFinish]master server client <----> Realiza un proceso de reordenamiento entre la primera y la ultima rama pasando por los cambios de las ramas intermedias
+git rebase [RamaActual] [RamaFusion] <----> Reorganiza las confirmaciones de RamaFusion sobre la RamaActual
